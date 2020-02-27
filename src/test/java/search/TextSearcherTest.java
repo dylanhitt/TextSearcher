@@ -22,8 +22,12 @@ public class TextSearcherTest {
 	/** Simplest possible case, no context and the word occurs exactly once. */
 	@Test
 	public void testOneHitNoContext() throws Exception {
+
 		String[] expected = { "sketch" };
-		File file = new File("files/short_excerpt.txt");
+
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		File file = new File(classLoader.getResource("short_excerpt.txt").getFile());
 		TextSearcher searcher = new TextSearcher(file);
 		String[] results = searcher.search("sketch", 0);
 		assertArraysEqual(expected, results);

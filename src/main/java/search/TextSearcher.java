@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TextSearcher {
 
@@ -33,7 +35,17 @@ public class TextSearcher {
 	 * implement search efficiently.
 	 */
 	protected void init(String fileContents) {
-		// TODO -- fill in implementation
+		TextTokenizer lexer = new TextTokenizer(fileContents, "[A-Za-z0-9\"']+(\\s*)");
+		List<String> tokens = new ArrayList<String>();
+		while (lexer.hasNext()) {
+			String s = lexer.next();
+			tokens.add(s);
+			boolean h = lexer.isWord(s);
+			if (!h) {
+				int y = 9;
+			}
+		}
+		int x = 0;
 	}
 
 	/**
@@ -47,10 +59,20 @@ public class TextSearcher {
 		// TODO -- fill in implementation
 		return new String[0];
 	}
-
-	public static void main(String[] args) {
-		System.out.println("Hello World!");
-	}
 }
 
 // Any needed utility classes can just go in this file
+
+// POJO that is used store characteristics of each token
+class TokenCharacteristics {
+	public String OriginalToken;
+	public String CleanToken;
+	public boolean IsPunctuation;
+
+	public TokenCharacteristics(String originalToken, String cleanToken, boolean isPunctuation) {
+		this.OriginalToken = originalToken;
+		this.CleanToken = cleanToken;
+		this.IsPunctuation = isPunctuation;
+	}
+
+}
