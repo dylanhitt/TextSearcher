@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TextSearcher {
+
+	// might extends this into it's own class.
+	// Similar to a linkedMap however linked is down on map values
+	// not the whole entry
+	private Map<String, LinkedNode<TokenMeta>> valueLinkedMap;
 
 	/**
 	 * Initializes the text searcher with the contents of a text file. The current
@@ -18,6 +22,8 @@ public class TextSearcher {
 	 * @throws IOException
 	 */
 	public TextSearcher(File f) throws IOException {
+		valueLinkedMap = new HashMap<String, LinkedNode<TokenMeta>>();
+
 		FileReader r = new FileReader(f);
 		StringWriter w = new StringWriter();
 		char[] buf = new char[4096];
@@ -36,16 +42,20 @@ public class TextSearcher {
 	 */
 	protected void init(String fileContents) {
 		TextTokenizer lexer = new TextTokenizer(fileContents, "[A-Za-z0-9\"']+(\\s*)");
-		List<String> tokens = new ArrayList<String>();
+
+		LinkedNode<TokenMeta> prev = null;
 		while (lexer.hasNext()) {
-			String s = lexer.next();
-			tokens.add(s);
-			boolean h = lexer.isWord(s);
-			if (!h) {
-				int y = 9;
+			// link em and feed into hashtable
+			LinkedNode<TokenMeta> curr = this.createTokenNode(lexer);
+			if (prev != null) {
+				prev.Next = curr;
 			}
+			curr.Prev = prev;
+			prev = curr;
+			curr.Next = null;
+
+			valueLinkedMap.put(curr.Value.CleanToken, curr);
 		}
-		int x = 0;
 	}
 
 	/**
@@ -59,20 +69,49 @@ public class TextSearcher {
 		// TODO -- fill in implementation
 		return new String[0];
 	}
+
+	private LinkedNode<TokenMeta> createTokenNode(TextTokenizer lexer) {
+		String originalToken = lexer.next();
+		boolean isWord = lexer.isWord(originalToken);
+		String cleanToken = originalToken.toLowerCase();
+
+		TokenMeta tokenMeta = new TokenMeta(originalToken, cleanToken, isWord);
+
+		return new LinkedNode<TokenMeta>(tokenMeta);
+	}
 }
 
 // Any needed utility classes can just go in this file
 
-// POJO that is used store characteristics of each token
-class TokenCharacteristics {
+// POJO that is used store tokenMeta of each token
+class TokenMeta {
 	public String OriginalToken;
 	public String CleanToken;
-	public boolean IsPunctuation;
+	public boolean IsWord;
 
-	public TokenCharacteristics(String originalToken, String cleanToken, boolean isPunctuation) {
+	public TokenMeta(String originalToken, String cleanToken, boolean isWord) {
 		this.OriginalToken = originalToken;
 		this.CleanToken = cleanToken;
-		this.IsPunctuation = isPunctuation;
+		this.IsWord = isWord;
+	}
+}
+
+// Node class that supports linked nodes
+// Supports point to previous and next
+class LinkedNode<T> {
+	public LinkedNode<T> Next;
+	public LinkedNode<T> Prev;
+	public T Value;
+
+	public LinkedNode(T value) {
+		this.Value = value;
 	}
 
+	public boolean hasNext() {
+		return this.Next != null;
+	}
+
+	public boolean hasPrev() {
+		return this.Prev != null;
+	}
 }
