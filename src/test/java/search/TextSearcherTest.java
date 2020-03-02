@@ -1,11 +1,12 @@
 package search;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 /** Unit tests for TextSearcher. Don't modify this file. */
@@ -25,10 +26,7 @@ public class TextSearcherTest {
 
 		String[] expected = { "sketch" };
 
-		ClassLoader classLoader = getClass().getClassLoader();
-
-		File file = new File(classLoader.getResource("short_excerpt.txt").getFile());
-		TextSearcher searcher = new TextSearcher(file);
+		TextSearcher searcher = new TextSearcher(getFile("short_excerpt.txt"));
 		String[] results = searcher.search("sketch", 0);
 		assertArraysEqual(expected, results);
 	}
@@ -37,8 +35,8 @@ public class TextSearcherTest {
 	@Test
 	public void testMultipleHitsNoContext() throws Exception {
 		String[] expected = { "naturalists", "naturalists" };
-		File file = new File("files/short_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+
+		TextSearcher searcher = new TextSearcher(getFile("short_excerpt.txt"));
 		String[] results = searcher.search("naturalists", 0);
 		assertArraysEqual(expected, results);
 	}
@@ -48,8 +46,8 @@ public class TextSearcherTest {
 	public void testBasicSearch() throws Exception {
 		String[] expected = { "great majority of naturalists believed that species",
 				"authors.  Some few naturalists, on the other" };
-		File file = new File("files/short_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+
+		TextSearcher searcher = new TextSearcher(getFile("short_excerpt.txt"));
 		String[] results = searcher.search("naturalists", 3);
 		assertArraysEqual(expected, results);
 	}
@@ -60,8 +58,8 @@ public class TextSearcherTest {
 		String[] expected = {
 				"Until recently the great majority of naturalists believed that species were immutable productions",
 				"maintained by many authors.  Some few naturalists, on the other hand, have believed" };
-		File file = new File("files/short_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+
+		TextSearcher searcher = new TextSearcher(getFile("short_excerpt.txt"));
 		String[] results = searcher.search("naturalists", 6);
 		assertArraysEqual(expected, results);
 	}
@@ -71,8 +69,8 @@ public class TextSearcherTest {
 	public void testApostropheQuery() throws Exception {
 		String[] expected = { "not indeed to the animal's or plant's own good",
 				"habitually speak of an animal's organisation as\r\nsomething plastic" };
-		File file = new File("files/long_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+
+		TextSearcher searcher = new TextSearcher(getFile("long_excerpt.txt"));
 		String[] results = searcher.search("animal's", 4);
 		assertArraysEqual(expected, results);
 	}
@@ -81,8 +79,7 @@ public class TextSearcherTest {
 	@Test
 	public void testNumericQuery() throws Exception {
 		String[] expected = { "enlarged in 1844 into a", "sketch of 1844--honoured me" };
-		File file = new File("files/long_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+		TextSearcher searcher = new TextSearcher(getFile("long_excerpt.txt"));
 		String[] results = searcher.search("1844", 2);
 		assertArraysEqual(expected, results);
 	}
@@ -91,8 +88,8 @@ public class TextSearcherTest {
 	@Test
 	public void testMixedQuery() throws Exception {
 		String[] expected = { "date first edition [xxxxx10x.xxx] please check" };
-		File file = new File("files/long_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+
+		TextSearcher searcher = new TextSearcher(getFile("long_excerpt.txt"));
 		String[] results = searcher.search("xxxxx10x", 3);
 		assertArraysEqual(expected, results);
 	}
@@ -103,8 +100,8 @@ public class TextSearcherTest {
 		String[] expected = { "on the Origin of Species.  Until recently the great",
 				"of naturalists believed that species were immutable productions, and",
 				"hand, have believed that species undergo modification, and that" };
-		File file = new File("files/short_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+
+		TextSearcher searcher = new TextSearcher(getFile("short_excerpt.txt"));
 		String[] results = searcher.search("species", 4);
 		assertArraysEqual(expected, results);
 
@@ -120,8 +117,7 @@ public class TextSearcherTest {
 	public void testNearBeginning() throws Exception {
 		String[] expected = { "I will here give a brief sketch" };
 
-		File file = new File("files/short_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+		TextSearcher searcher = new TextSearcher(getFile("short_excerpt.txt"));
 		String[] results = searcher.search("here", 4);
 		assertArraysEqual(expected, results);
 	}
@@ -130,8 +126,7 @@ public class TextSearcherTest {
 	@Test
 	public void testNearEnd() throws Exception {
 		String[] expected = { "and that the existing forms of life", "generation of pre existing forms." };
-		File file = new File("files/short_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+		TextSearcher searcher = new TextSearcher(getFile("short_excerpt.txt"));
 		String[] results = searcher.search("existing", 3);
 		assertArraysEqual(expected, results);
 	}
@@ -139,8 +134,8 @@ public class TextSearcherTest {
 	/** Searcher can execute multiple searches after initialization. */
 	@Test
 	public void testMultipleSearches() throws Exception {
-		File file = new File("files/short_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+
+		TextSearcher searcher = new TextSearcher(getFile("short_excerpt.txt"));
 		String[] expected;
 		String[] results;
 
@@ -169,8 +164,8 @@ public class TextSearcherTest {
 				"undergo modification, and that the existing forms",
 
 		};
-		File file = new File("files/short_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+
+		TextSearcher searcher = new TextSearcher(getFile("short_excerpt.txt"));
 		String[] results = searcher.search("that", 3);
 		assertArraysEqual(expected, results);
 	}
@@ -178,8 +173,8 @@ public class TextSearcherTest {
 	/** If no hits, get back an empty array. */
 	@Test
 	public void testNoHits() throws Exception {
-		File file = new File("files/long_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
+
+		TextSearcher searcher = new TextSearcher(getFile("long_excerpt.txt"));
 		String[] results = searcher.search("slejrlskejrlkajlsklejrlksjekl", 3);
 		Assert.assertNotNull(results);
 		Assert.assertEquals(0, results.length);
@@ -203,4 +198,63 @@ public class TextSearcherTest {
 		Assert.assertFalse(lexer.isWord("1029388 "));
 		Assert.assertFalse(lexer.isWord("123,456"));
 	}
+
+	// My tests -- typically would be going in another file
+
+	@Test
+	public void testHashCode() throws Exception {
+
+		OccurenceKey key1 = new OccurenceKey("give", 0);
+		OccurenceKey key2 = new OccurenceKey("give", 0);
+
+		assertEquals(key1.hashCode(), key2.hashCode());
+	}
+
+	@Test
+	public void testAddNode() throws Exception {
+		TextSearcher searcher = new TextSearcher();
+		LinkedNode<TokenMeta> tNode = CreateTestNode("hello", true);
+		searcher.addNode(tNode);
+
+		assertEquals(1, searcher.getWordOccurrences("hello").size());
+	}
+
+	@Test
+	public void testGettingContext() throws Exception {
+		TextSearcher searcher = new TextSearcher();
+
+		LinkedNode<TokenMeta> node1 = CreateTestNode("Hello", true);
+		LinkedNode<TokenMeta> node2 = CreateTestNode(", ", false);
+		node1.next = node2;
+		node2.prev = node1;
+		LinkedNode<TokenMeta> node3 = CreateTestNode("great ", true);
+		node2.next = node3;
+		node3.prev = node2;
+		LinkedNode<TokenMeta> node4 = CreateTestNode("world", true);
+		node3.next = node4;
+		node4.prev = node3;
+
+		searcher.addNode(node1);
+		searcher.addNode(node2);
+		searcher.addNode(node3);
+		searcher.addNode(node4);
+
+		String nextContent = searcher.getNextContext(node1, 1);
+		assertEquals(", great ", nextContent);
+		String prevContent = searcher.getPrevContent(node4, 2);
+		assertEquals("Hello, great ", prevContent);
+
+	}
+
+	private LinkedNode<TokenMeta> CreateTestNode(String token, boolean isWord) {
+		TokenMeta tokenMeta = new TokenMeta(token, isWord);
+		return new LinkedNode<TokenMeta>(tokenMeta);
+	}
+
+	private File getFile(String file) {
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		return new File(classLoader.getResource(file).getFile());
+	}
+
 }
