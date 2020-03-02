@@ -14,5 +14,5 @@ TextSearcher reads in plain text files, parses and them and then allows a user t
 Maven is used to test and build the app. After cloning and assuming the user has two dependencies decribed above. The user just need to run `mvn package` - this will both build and test the app.
 
 ### Test results 
-If you would like to view the current test results they are [here](https://travis-ci.com/dylanhitt1/TextSearcher/jobs/292839082)
+If you would like to view the current test results they are [here](https://travis-ci.com/dylanhitt1/TextSearcher)
 
