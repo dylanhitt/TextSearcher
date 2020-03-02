@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/dylanhitt1/TextSearcher.svg?branch=master)](https://travis-ci.org/dylanhitt1/TextSearcher)
+[![Build Status](https://travis-ci.com/dylanhitt1/TextSearcher.svg?branch=master)](https://travis-ci.com/dylanhitt1/TextSearcher)
 <!-- [![Maintainability](https://api.codeclimate.com/v1/badges/cc848165784e0f809a51/maintainability)](https://codeclimate.com/github/SimonBaeumer/commander/maintainability) -->
 
 # TextSearcher
