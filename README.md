@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/SimonBaeumer/commander.svg?branch=master)](https://travis-ci.org/dylanhitt1/TextSearcher)
+[![Build Status](https://travis-ci.com/dylanhitt1/TextSearcher.svg?branch=master)](https://travis-ci.org/dylanhitt1/TextSearcher)
 <!-- [![Maintainability](https://api.codeclimate.com/v1/badges/cc848165784e0f809a51/maintainability)](https://codeclimate.com/github/SimonBaeumer/commander/maintainability) -->
 
 # TextSearcher
-TextSearcher reads in two plain text files, parses and them and then allows a user to search for desired words and context around said words.
+TextSearcher reads in plain text files, parses and them and then allows a user to search for desired words and context around said words.
 
 ### Dependencies
 - openjdk 
