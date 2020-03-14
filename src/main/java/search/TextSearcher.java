@@ -241,7 +241,7 @@ class LinkedNode<T> {
 }
 
 /**
- * OccurenceKey is teh class used to decribe a key of the token hashmap
+ * OccurenceKey is the class used to decribe a key of the token hashmap
  * 
  * @param word      is the token that is within the file
  * @param occurence is the number of times the word has occured is the file
