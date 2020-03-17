@@ -216,7 +216,7 @@ public class TextSearcherTest {
 		LinkedNode<TokenMeta> tNode = CreateTestNode("hello", true);
 		searcher.addNode(tNode);
 
-		assertEquals(1, searcher.getWordOccurrences("hello").size());
+		assertEquals(1, searcher.getMatchedNodes("hello").size());
 	}
 
 	@Test
@@ -238,11 +238,6 @@ public class TextSearcherTest {
 		searcher.addNode(node2);
 		searcher.addNode(node3);
 		searcher.addNode(node4);
-
-		String nextContent = searcher.getNextContext(node1, 1);
-		assertEquals(", great ", nextContent);
-		String prevContent = searcher.getPrevContent(node4, 2);
-		assertEquals("Hello, great ", prevContent);
 
 	}
 
