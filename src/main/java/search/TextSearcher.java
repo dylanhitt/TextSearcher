@@ -1,3 +1,4 @@
+
 package search;
 
 import java.io.File;
@@ -9,7 +10,7 @@ import java.util.*;
 
 public class TextSearcher {
 
-	// Similar to a linkedMap however linked is down on map values
+	// Similar to a linkedMap however linked is done on map values
 	// not the whole entry
 	private Map<OccurenceKey, LinkedNode<TokenMeta>> valueLinkedMap;
 
@@ -72,25 +73,21 @@ public class TextSearcher {
 	 */
 	public String[] search(String queryWord, int contextWords) {
 		queryWord = queryWord.toLowerCase();
-		List<LinkedNode<TokenMeta>> wordOccurences = getWordOccurrences(queryWord);
-		String[] foundStrings = new String[wordOccurences.size()];
-
-		for (int i = 0; i < wordOccurences.size(); i++) {
-			LinkedNode<TokenMeta> node = wordOccurences.get(i);
-			String myString = node.value.originalToken;
-
-			myString = myString.concat(getNextContext(node, contextWords));
-			myString = getPrevContent(node, contextWords).concat(myString);
-
-			foundStrings[i] = myString.trim();
-
+		List<LinkedNode<TokenMeta>> occurences = getMatchedNodes(queryWord);
+		String[] foundStrings = new String[occurences.size()];
+		int i = 0;
+		for (LinkedNode<TokenMeta> node : occurences) {
+			foundStrings[i] = getContext(node, contextWords);
+			i++;
 		}
 
 		return foundStrings;
 	}
 
 	/**
-	 * Adds node to hashmap, increments occurence if key already exists
+	 * Addds node to hashmap, increments occurence if key already exists we
+	 * increment the key because it handles the case of having the same word occur
+	 * in a file multiple times
 	 * 
 	 * @param node to add
 	 */
@@ -107,15 +104,16 @@ public class TextSearcher {
 	}
 
 	/**
-	 * Get the number of times a word occurs in the HashMap
+	 * Gets the occurrences of a word
 	 * 
-	 * @param queryWord
-	 * @return
+	 * @param queryWord we are searching for
+	 * @return a List<LinkedNode<TokenMeta> with each linked node being a node
+	 *         that's key word matched the queryword
 	 */
-	public List<LinkedNode<TokenMeta>> getWordOccurrences(String queryWord) {
+	public List<LinkedNode<TokenMeta>> getMatchedNodes(String queryWord) {
 		List<LinkedNode<TokenMeta>> nodes = new ArrayList<>();
 		OccurenceKey key = new OccurenceKey(queryWord, 0);
-		while (valueLinkedMap.containsKey(key)) { // increment until unique key
+		while (valueLinkedMap.containsKey(key)) { // increment until key is not founc
 			nodes.add(valueLinkedMap.get(key));
 			key.incrementOccurence();
 		}
@@ -123,25 +121,16 @@ public class TextSearcher {
 	}
 
 	/**
-	 * Helper method to call recursive function get next words
+	 * Gets the desired context around the node
 	 * 
-	 * @param node    initial node
-	 * @param context
-	 * @return returns next contenr
+	 * @return the original string of the node and it's surrounding context
 	 */
-	public String getNextContext(LinkedNode<TokenMeta> node, int context) {
-		return nextContext(node.next, context, 0, "");
-	}
+	private String getContext(LinkedNode<TokenMeta> node, int context) {
+		String nextContext = nextContext(node.next, context, 0, "");
+		String prevContext = prevContext(node.prev, context, 0, "");
 
-	/**
-	 * Helper methode to call recursive function to get prev words
-	 * 
-	 * @param node
-	 * @param context
-	 * @return
-	 */
-	public String getPrevContent(LinkedNode<TokenMeta> node, int context) {
-		return prevContext(node.prev, context, 0, "");
+		String returnString = prevContext.concat(node.value.originalToken);
+		return returnString.concat(nextContext).trim();
 	}
 
 	/**
@@ -160,9 +149,8 @@ public class TextSearcher {
 		string = node.value.originalToken;
 		if (node.value.isWord) {
 			return string.concat(nextContext(node.next, context, ++increments, string));
-		} else {
-			return string.concat(nextContext(node.next, context, increments, string));
 		}
+		return string.concat(nextContext(node.next, context, increments, string));
 	}
 
 	/**
@@ -181,9 +169,8 @@ public class TextSearcher {
 		string = node.value.originalToken;
 		if (node.value.isWord) {
 			return prevContext(node.prev, context, ++increments, string).concat(string);
-		} else {
-			return prevContext(node.prev, context, increments, string).concat(string);
 		}
+		return prevContext(node.prev, context, increments, string).concat(string);
 	}
 
 	/**
@@ -281,7 +268,7 @@ class OccurenceKey {
 	}
 
 	/**
-	 * Override of standard equals Checks to make sure both value types are equal
+	 * Override of standard equals Checks to make sure both value types are equal.
 	 */
 	@Override
 	public boolean equals(Object object) {
