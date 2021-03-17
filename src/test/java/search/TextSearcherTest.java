@@ -193,7 +193,6 @@ public class TextSearcherTest {
 		}
 		String[] results = (String[]) tokens.toArray(new String[tokens.size()]);
 		assertArraysEqual(expected, results);
-		//
 		Assert.assertTrue(lexer.isWord("1029384"));
 		Assert.assertFalse(lexer.isWord("1029388 "));
 		Assert.assertFalse(lexer.isWord("123,456"));
